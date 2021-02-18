@@ -1,24 +1,17 @@
 package com.kafka.boilerplate.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.NotEmpty;
 
-@Getter
-@Setter
+@Data
 public class User {
-	@NotNull(message = "Name is required")
+	@NotEmpty(message = "Name is required")
 	private String name;
-	@Min(value = 1, message ="Age should be min 1")
-	private String age;
-	@NotNull
-	private Type type;
-	@NotNull
-	private String title;
 
+	private String age;
+	@NotBlank
+	private Type type;
 }
 
