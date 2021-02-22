@@ -1,6 +1,7 @@
 package com.kafka.boilerplate.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.kafka.boilerplate.controller.constant.JobPosition;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -18,4 +19,6 @@ public class UserDTO {
 	private String age;
 
 	private Type type;
+
+	private JobPosition position;
 }
