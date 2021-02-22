@@ -1,18 +1,13 @@
 package com.kafka.boilerplate.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kafka.boilerplate.dto.User;
-import lombok.val;
+import com.kafka.boilerplate.service.pyload.UserPayload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.annotation.PartitionOffset;
-import org.springframework.kafka.annotation.TopicPartition;
 import org.springframework.kafka.support.KafkaHeaders;
-import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
@@ -32,14 +27,16 @@ public class ConsumerService {
 	//@KafkaListener(topics = "topic1, topic2", groupId = "foo") // Read multiple topics
 	//@Valid
 	@KafkaListener(topics = "topic-boilerplate", groupId = "foo")
-	public void listenWithHeaders(@Payload String message,
+	public void listenWithHeaders(@Validated @Payload String message,
 	                              @Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition) {
 		final ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
+		//objectMapper.configure(DeserializationFeature.FAIL_ON_MISSING_CREATOR_PROPERTIES, true);
 		try {
-			final User user = objectMapper.readValue(message, User.class);
-			LOGGER.info("Received Payload: " + user + "from partition: " + partition);
-		} catch (JsonProcessingException e) {
+			final UserPayload userPayload = objectMapper.readValue(message, UserPayload.class);
+			LOGGER.info("Received Payload: " + userPayload + " from partition: " + partition);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

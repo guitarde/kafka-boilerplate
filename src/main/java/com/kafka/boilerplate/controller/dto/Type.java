@@ -1,4 +1,4 @@
-package com.kafka.boilerplate.dto;
+package com.kafka.boilerplate.controller.dto;
 
 import lombok.Getter;
 import lombok.Setter;
